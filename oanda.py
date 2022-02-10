@@ -2,6 +2,8 @@
 """
 import logging
 
+from oandapyV20 import API
+
 
 logger = logging.getLogger(__name__)
 
@@ -19,3 +21,17 @@ class Oanda:
         """
         self.account_id = account_id
         self.access_token = access_token
+        self.api = None
+
+    def connect(self, environment: str='practice') -> None:
+        """接続
+
+        Args:
+            environment (str): 環境
+
+        Examples:
+            >>> api.connect('live')
+        """
+        self.api = API(
+            access_token=self.access_token,
+            environment=environment)

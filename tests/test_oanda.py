@@ -30,3 +30,5 @@ class TestOanda(unittest.TestCase):
         self.api = Oanda(
             account_id=config.get('OANDA', 'ACCOUNT_ID'),
             access_token=config.get('OANDA', 'ACCESS_TOKEN'))
+
+        self.api.connect('live')
