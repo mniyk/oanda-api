@@ -4,7 +4,7 @@ from datetime import datetime
 import logging
 
 from oandapyV20 import API
-from oandapyV20.endpoints import instruments
+from oandapyV20.endpoints import accounts, instruments
 
 
 logger = logging.getLogger(__name__)
@@ -74,3 +74,21 @@ class Oanda:
         response = self.api.request(request)
 
         return response['candles']
+
+    def get_pip(self, symbol: str):
+        """PIPの取得
+
+        Args:
+            symbol (str): 通貨ペア
+
+        Examples:
+            >>> self.api.get_pip('USD_JPY')
+        """
+        request = accounts.AccountInstruments(
+            accountID=self.account_id, params={'instruments': symbol})
+
+        response = self.api.request(request)
+
+        pip = 10 ** response['instruments'][0]['pipLocation']
+
+        return pip

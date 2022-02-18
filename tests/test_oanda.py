@@ -42,3 +42,6 @@ class TestOanda(unittest.TestCase):
             'USD_JPY', 'M15', latest_datetime=latest_datetime, count=5000)
 
         print(candles)
+
+    def test_get_pip(self) -> None:
+        self.api.get_pip('USD_JPY')
