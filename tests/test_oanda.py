@@ -1,6 +1,8 @@
 """oanda.pyのunittest
 """
 import configparser
+from datetime import datetime
+from itertools import count
 import logging
 import unittest
 
@@ -32,3 +34,11 @@ class TestOanda(unittest.TestCase):
             access_token=config.get('OANDA', 'ACCESS_TOKEN'))
 
         self.api.connect('live')
+
+    def test_get_candles(self) -> None:
+        latest_datetime = datetime.utcnow().timestamp()
+
+        candles = self.api.get_candles(
+            'USD_JPY', 'M15', latest_datetime=latest_datetime, count=5000)
+
+        print(candles)

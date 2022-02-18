@@ -1,8 +1,10 @@
 """OANDA APIを操作するためのモジュール
 """
+from datetime import datetime
 import logging
 
 from oandapyV20 import API
+from oandapyV20.endpoints import instruments
 
 
 logger = logging.getLogger(__name__)
@@ -35,3 +37,35 @@ class Oanda:
         self.api = API(
             access_token=self.access_token,
             environment=environment)
+
+    def get_candles(
+        self,
+        symbol: str,
+        timeframe: str,
+        count: int=None,
+        latest_datetime: datetime=None):
+        """ローソク足データの取得
+
+        Args:
+            symbol (str): 通貨ペア
+            timeframe (str): ローソク足時間
+            count (int): データ数
+            latest_datetime (datetime): 取得する最新の日時
+        """
+        params = {'granularity': timeframe}
+
+        if count is None and latest_datetime is None:
+            raise Exception
+
+        if count is not None:
+            params.setdefault('count', count)
+        
+        if latest_datetime is not None:
+            params.setdefault('from', latest_datetime)
+
+        request = instruments.InstrumentsCandles(
+            instrument=symbol, params=params)
+        
+        response = self.api.request(request)
+
+        return response['candles']
