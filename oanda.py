@@ -52,10 +52,16 @@ class Oanda:
             count (int): データ数
             latest_datetime (datetime): 取得する最新の日時
 
+        Return:
+            list: ローソク足データ
+
         Examples:
             >>> latest_datetime = datetime.utcnow().timestamp()
-            >>> candles = self.api.get_candles(
-                'USD_JPY', 'M15', latest_datetime=latest_datetime, count=5000)
+            >>> candles = api.get_candles(
+                    'USD_JPY', 
+                    'M15', 
+                    latest_datetime=latest_datetime, 
+                    count=5000)
         """
         params = {'granularity': timeframe}
 
@@ -75,14 +81,17 @@ class Oanda:
 
         return response['candles']
 
-    def get_pip(self, symbol: str):
+    def get_pip(self, symbol: str) -> float:
         """PIPの取得
 
         Args:
             symbol (str): 通貨ペア
 
+        Returns:
+            float: PIP
+
         Examples:
-            >>> self.api.get_pip('USD_JPY')
+            >>> api.get_pip('USD_JPY')
         """
         request = accounts.AccountInstruments(
             accountID=self.account_id, params={'instruments': symbol})
@@ -93,7 +102,7 @@ class Oanda:
 
         return pip
 
-    def send_order(self, symbol: str, direction: int, units: int):
+    def send_order(self, symbol: str, direction: int, units: int) -> dict:
         """注文の送信
 
         Args:
@@ -102,10 +111,10 @@ class Oanda:
             units (int): 発注数
 
         Returns:
-            dict: 取引内容
+            dict: 注文内容
 
         Examples:
-            >>> self.api.send_order('USD_JPY', 1, 1)
+            >>> api.send_order('USD_JPY', 1, 1)
         """
         data = {
             'order': {
@@ -130,14 +139,17 @@ class Oanda:
         else:
             raise Exception
 
-    def close_order(self, order_id: str):
+    def close_order(self, order_id: str) -> dict:
         """取引の決済
 
         Args:
             order_id (str): 取引ID
 
+        Returns:
+            dict: 注文内容
+
         Examples:
-            >>> 
+            >>> api.close_order('11111')
         """
         request = trades.TradeClose(self.account_id, order_id)
 
