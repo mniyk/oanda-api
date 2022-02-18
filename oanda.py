@@ -4,7 +4,7 @@ from datetime import datetime
 import logging
 
 from oandapyV20 import API
-from oandapyV20.endpoints import accounts, instruments, orders
+from oandapyV20.endpoints import accounts, instruments, orders, trades
 
 
 logger = logging.getLogger(__name__)
@@ -129,3 +129,27 @@ class Oanda:
             return order
         else:
             raise Exception
+
+    def close_order(self, order_id: str):
+        """取引の決済
+
+        Args:
+            order_id (str): 取引ID
+
+        Examples:
+            >>> 
+        """
+        request = trades.TradeClose(self.account_id, order_id)
+
+        response = self.api.request(request)
+
+        order = {
+            'symbol': response['orderFillTransaction']['instrument'],
+            'utc': response['orderFillTransaction']['time'],
+            'id': response['lastTransactionID'],
+            'price': float(response['orderFillTransaction']['price']),
+            'units': float(response['orderFillTransaction']['units']),
+            'profit_loss': float(response['orderFillTransaction']['pl']), 
+            'open_order_id': order_id}
+
+        return order
