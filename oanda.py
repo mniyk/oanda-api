@@ -51,6 +51,11 @@ class Oanda:
             timeframe (str): ローソク足時間
             count (int): データ数
             latest_datetime (datetime): 取得する最新の日時
+
+        Examples:
+            >>> latest_datetime = datetime.utcnow().timestamp()
+            >>> candles = self.api.get_candles(
+                'USD_JPY', 'M15', latest_datetime=latest_datetime, count=5000)
         """
         params = {'granularity': timeframe}
 
