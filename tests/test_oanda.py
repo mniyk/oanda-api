@@ -58,3 +58,10 @@ class TestOanda(unittest.TestCase):
         print(
             self.api.send_profit(
                 'USD_JPY', order['id'], 1, order['price'], 20))
+
+    def test_send_loss(self) -> None:
+        order = self.api.send_order('USD_JPY', 1, 1)
+        
+        print(
+            self.api.send_loss(
+                'USD_JPY', order['id'], 1, order['price'], 20))

@@ -161,15 +161,20 @@ class Oanda:
         order_id: str, 
         direction: int, 
         price: float, 
-        profit_pip):
+        profit_pip: int):
         """指値の送信
 
         Args:
-            symbol: 通貨ペア
-            trade_id: 取引ID
-            direction: 売買方向
-            price: 発注時の価格
-            profit_pip: 指値PIP
+            symbol (str): 通貨ペア
+            trade_id (str): 取引ID
+            direction (int): 売買方向
+            price (float): 発注時の価格
+            profit_pip (int): 指値PIP
+
+        Examples:
+            >>> order = self.api.send_order('USD_JPY', 1, 1)
+            >>> self.api.send_profit(
+                    'USD_JPY', order['id'], 1, order['price'], 20)
         """
         pip = self.get_pip(symbol)
         profit_pip = profit_pip * pip
@@ -188,5 +193,45 @@ class Oanda:
         request = orders.OrderCreate(self.account_id, data=data)
 
         response = self.api.request(request)
+
+        return response
+
+    def send_loss(
+        self, 
+        symbol: str, 
+        order_id: str, 
+        direction: int, 
+        price: float, 
+        loss_pip: int):
+        """指値の送信
+
+        Args:
+            symbol (str): 通貨ペア
+            trade_id (str): 取引ID
+            direction (int): 売買方向
+            price (float): 発注時の価格
+            loss_pip (int): 逆指値PIP
+        
+        Examples:
+            >>> order = self.api.send_order('USD_JPY', 1, 1)
+            >>> self.api.send_loss(
+                    'USD_JPY', order['id'], 1, order['price'], 20)
+        """
+        pip = self.get_pip(symbol)
+        loss_pip = loss_pip * pip
+
+        loss_rate = price - loss_pip if direction == 1 else price + loss_pip
+        loss_rate = f'{loss_rate:.3f}'
+
+        data = {
+            'order': {
+                'type': 'STOP_LOSS', 
+                'tradeID': order_id, 
+                'timeInForce': 'GTC', 
+                'price': loss_rate}}
+
+        order = orders.OrderCreate(self.account_id, data=data)
+        
+        response = self.api.request(order)
 
         return response
