@@ -45,3 +45,6 @@ class TestOanda(unittest.TestCase):
 
     def test_get_pip(self) -> None:
         self.api.get_pip('USD_JPY')
+
+    def test_send_order(self) -> None:
+        print(self.api.send_order('USD_JPY', 1, 1))

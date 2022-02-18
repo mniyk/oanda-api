@@ -4,7 +4,7 @@ from datetime import datetime
 import logging
 
 from oandapyV20 import API
-from oandapyV20.endpoints import accounts, instruments
+from oandapyV20.endpoints import accounts, instruments, orders
 
 
 logger = logging.getLogger(__name__)
@@ -92,3 +92,40 @@ class Oanda:
         pip = 10 ** response['instruments'][0]['pipLocation']
 
         return pip
+
+    def send_order(self, symbol: str, direction: int, units: int):
+        """注文の送信
+
+        Args:
+            symbol (str): 通貨ペア
+            direction (int): 売買方向
+            units (int): 発注数
+
+        Returns:
+            dict: 取引内容
+
+        Examples:
+            >>> self.api.send_order('USD_JPY', 1, 1)
+        """
+        data = {
+            'order': {
+                'instrument': symbol, 
+                'units': units * direction, 
+                'type': 'MARKET',
+                'positionFill': 'DEFAULT'}}
+
+        request = orders.OrderCreate(accountID=self.account_id, data=data)
+
+        response = self.api.request(request)
+
+        if 'orderCancelTransaction' not in response:
+            order = {
+                'symbol': response['orderFillTransaction']['instrument'],
+                'utc': response['orderFillTransaction']['time'],
+                'id': response['lastTransactionID'],
+                'price': float(response['orderFillTransaction']['price']),
+                'units': float(response['orderFillTransaction']['units'])}
+
+            return order
+        else:
+            raise Exception
