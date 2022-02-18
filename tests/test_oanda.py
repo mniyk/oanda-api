@@ -51,3 +51,10 @@ class TestOanda(unittest.TestCase):
 
     def test_close_order(self) -> None:
         print(self.api.close_order('14361'))
+
+    def test_send_profit(self) -> None:
+        order = self.api.send_order('USD_JPY', 1, 1)
+
+        print(
+            self.api.send_profit(
+                'USD_JPY', order['id'], 1, order['price'], 20))

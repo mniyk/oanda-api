@@ -153,3 +153,40 @@ class Oanda:
             'open_order_id': order_id}
 
         return order
+
+    
+    def send_profit(
+        self, 
+        symbol: str, 
+        order_id: str, 
+        direction: int, 
+        price: float, 
+        profit_pip):
+        """指値の送信
+
+        Args:
+            symbol: 通貨ペア
+            trade_id: 取引ID
+            direction: 売買方向
+            price: 発注時の価格
+            profit_pip: 指値PIP
+        """
+        pip = self.get_pip(symbol)
+        profit_pip = profit_pip * pip
+
+        profit_rate = (
+            price + profit_pip if direction == 1 else price - profit_pip)
+        profit_rate = f'{profit_rate:.3f}'
+
+        data = {
+            'order': {
+                'type': 'TAKE_PROFIT', 
+                'tradeID': order_id, 
+                'timeInForce': 'GTC', 
+                'price': profit_rate}}
+
+        request = orders.OrderCreate(self.account_id, data=data)
+
+        response = self.api.request(request)
+
+        return response
