@@ -6,7 +6,7 @@ from itertools import count
 import logging
 import unittest
 
-from oanda import Oanda
+from oanda.oanda import Oanda
 
 
 logging.basicConfig(
