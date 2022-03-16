@@ -6,11 +6,11 @@ with open('README.md', 'r', encoding='utf-8') as f:
 
 setuptools.setup(
     name='oanda-api',
-    version='0.1.2',
+    version='0.1.3',
     author='mniyk',
     author_email='my.name.is.yohei.kono@gmail.com',
     description='oanda api python library',
     long_description=long_description,
     url='https://github.com/mniyk/oanda-api.git',
     packages=setuptools.find_packages(),
-    install_requires=['oandapyV20'])
+    install_requires=['oandapyV20', 'requests'])
