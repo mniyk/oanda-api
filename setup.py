@@ -6,7 +6,7 @@ with open('README.md', 'r', encoding='utf-8') as f:
 
 setuptools.setup(
     name='oanda-api',
-    version='0.1.4',
+    version='0.1.5',
     author='mniyk',
     author_email='my.name.is.yohei.kono@gmail.com',
     description='oanda api python library',

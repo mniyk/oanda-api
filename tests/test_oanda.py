@@ -1,8 +1,6 @@
 """oanda.pyのunittest
 """
 import configparser
-from datetime import datetime
-from itertools import count
 import logging
 import unittest
 
@@ -10,7 +8,7 @@ from oanda.oanda import Oanda
 
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format='\t'.join([
         '%(asctime)s',
         '%(levelname)s',
@@ -21,7 +19,8 @@ logging.basicConfig(
         '%(threadName)s',
         '%(thread)d',
         '%(message)s']))
-logger = logging.Logger(__name__)
+
+logger = logging.getLogger(__name__)
 
 
 class TestOanda(unittest.TestCase):
@@ -36,32 +35,32 @@ class TestOanda(unittest.TestCase):
         self.api.connect('live')
 
     def test_get_candles(self) -> None:
-        latest_datetime = datetime.utcnow().timestamp()
+        latest_datetime = '2022-03-18T00:00:00.000000000Z'
 
         candles = self.api.get_candles(
             'USD_JPY', 'M15', latest_datetime=latest_datetime, count=5000)
 
-        print(candles)
+        logger.debug(candles)
 
     def test_get_pip(self) -> None:
-        self.api.get_pip('USD_JPY')
+        logger.debug(self.api.get_pip('USD_JPY'))
 
     def test_send_order(self) -> None:
-        print(self.api.send_order('USD_JPY', 1, 1))
+        logger.debug(self.api.send_order('USD_JPY', 1, 1))
 
     def test_close_order(self) -> None:
-        print(self.api.close_order('14361'))
+        logger.debug(self.api.close_order('14361'))
 
     def test_send_profit(self) -> None:
         order = self.api.send_order('USD_JPY', 1, 1)
 
-        print(
+        logger.debug(
             self.api.send_profit(
                 'USD_JPY', order['id'], 1, order['price'], 20))
 
     def test_send_loss(self) -> None:
         order = self.api.send_order('USD_JPY', 1, 1)
         
-        print(
+        logger.debug(
             self.api.send_loss(
                 'USD_JPY', order['id'], 1, order['price'], 20))

@@ -1,6 +1,5 @@
 """OANDA APIを操作するためのモジュール
 """
-from datetime import datetime
 import logging
 
 from oandapyV20 import API
@@ -43,20 +42,20 @@ class Oanda:
         symbol: str,
         timeframe: str,
         count: int=None,
-        latest_datetime: datetime=None):
+        latest_datetime: str=None):
         """ローソク足データの取得
 
         Args:
             symbol (str): 通貨ペア
             timeframe (str): ローソク足時間
             count (int): データ数
-            latest_datetime (datetime): 取得する最新の日時
+            latest_datetime (str): 取得するローソク足の開始日時
 
         Return:
             list: ローソク足データ
 
         Examples:
-            >>> latest_datetime = datetime.utcnow().timestamp()
+            >>> latest_datetime = '2022-03-18T00:00:00.000000000Z'
             >>> candles = api.get_candles(
                     'USD_JPY', 
                     'M15', 
