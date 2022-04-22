@@ -32,7 +32,7 @@ class TestOanda(unittest.TestCase):
             account_id=config.get('OANDA', 'ACCOUNT_ID'),
             access_token=config.get('OANDA', 'ACCESS_TOKEN'))
 
-        self.api.connect('live')
+        self.api.connect('practice')
 
     def test_get_candles(self) -> None:
         latest_datetime = '2022-03-18T00:00:00.000000000Z'
@@ -44,6 +44,9 @@ class TestOanda(unittest.TestCase):
 
     def test_get_pip(self) -> None:
         logger.debug(self.api.get_pip('USD_JPY'))
+
+    def test_get_positions(self) -> None:
+        logger.debug(self.api.get_positions('USD_JPY'))
 
     def test_send_order(self) -> None:
         logger.debug(self.api.send_order('USD_JPY', 1, 1))

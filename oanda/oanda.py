@@ -1,9 +1,10 @@
 """OANDA APIを操作するためのモジュール
 """
 import logging
+from typing import Dict
 
 from oandapyV20 import API
-from oandapyV20.endpoints import accounts, instruments, orders, trades
+from oandapyV20.endpoints import accounts, instruments, orders, trades, positions
 
 
 logger = logging.getLogger(__name__)
@@ -100,6 +101,25 @@ class Oanda:
         pip = 10 ** response['instruments'][0]['pipLocation']
 
         return pip
+
+    def get_positions(self, symbol: str) -> Dict:
+        """ポジションの取得
+
+        Args:
+            symbol (str): 通貨ペア
+
+        Returns:
+            Dict: ポジション
+
+        Examples:
+            >>> api.get_positions('USD_JPY')
+        """
+        request = positions.PositionDetails(
+            accountID=self.account_id, instrument=symbol)
+
+        response = self.api.request(request)
+
+        return response
 
     def send_order(self, symbol: str, direction: int, units: int) -> dict:
         """注文の送信
